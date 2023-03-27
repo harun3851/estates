@@ -45,10 +45,10 @@ export default function ForgotPassword() {
               </p>
               <p>
                 <Link
-                  to="/forgot-password"
+                  to="/sign-in"
                   className="text-blue-600 hover:text-blue-700 transition duration-200 ease-in-out "
                 >
-                  Forgot password
+                  Sign in instead
                 </Link>
               </p>
             </div>
@@ -56,7 +56,7 @@ export default function ForgotPassword() {
             className="w-full bg-blue-600 text-white px-7 py-3 text-sm font-medium uppercase rounded shadow-md hover:bg-blue-700 transition duration-150 easy-in-out hover:shadow-lg active:bg-blue-800 "
             type="submit"
           >
-            Sign in
+            send reset password
           </button>
           <div className="flex items-center my-4 before:border-t  before:flex-1  before:border-gray-300
            after:border-t  after:flex-1  after:border-gray-300">
