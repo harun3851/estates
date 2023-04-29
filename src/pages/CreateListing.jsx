@@ -16,7 +16,30 @@ export default function CreateListing() {
 
   });
   const { type, name, bedrooms, bathrooms,parking,furnished,address, description,offer,regularPrice,discountedPrice } = formData;
-  function onChange() {}
+  function onChange(e) {
+    let boolean = null;
+
+    if(e.target.value==="true"){
+      boolean=true;
+    }
+    if(e.target.value==="false"){
+      boolean=false;
+    }
+        //files
+    if(e.target.file){
+      setFormData((prevState)=>({
+        ...prevState,
+        images:e.target.files
+      }))
+    }
+    //text/boolean/number
+    if(!e.target.files){
+      setFormData((prevState)=>({
+        ...prevState,
+        [e.target.id]: boolean ?? e.target.value,
+      }))
+    }
+  }
   return (
     <main className="max-w-md px-2 mx-auto ">
       <h1 className="text-3xl text-center mt-6 font bold">Create a Listing</h1>
@@ -41,7 +64,7 @@ export default function CreateListing() {
           <button
             type="button"
             id="type"
-            value="sale"
+            value="rent"
             onClick={onChange}
             className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded
                  hover:shadow-lg focus:shadow-lg
