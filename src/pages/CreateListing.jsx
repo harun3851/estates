@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Spinner from "../components/Spinner";
+import {toast} from "react-toastify";
 
 export default function CreateListing() {
   const [formData, setFormData] = useState({
@@ -12,10 +14,15 @@ export default function CreateListing() {
     description:"",
     offer:true,
     regularPrice:0,
-    discountedPrice:0
+    discountedPrice:0,
+    latitude: 0,
+    longitude:0,
+    images:{}
 
   });
-  const { type, name, bedrooms, bathrooms,parking,furnished,address, description,offer,regularPrice,discountedPrice } = formData;
+  const [geolocationEnabled,setGeolocationEnabled]=useState(true);
+  const [loading, setLoading]=useState(false);
+  const { type, name, bedrooms, bathrooms,parking,furnished,address, description,offer,regularPrice,discountedPrice, latitude, longitude,images } = formData;
   function onChange(e) {
     let boolean = null;
 
@@ -40,10 +47,34 @@ export default function CreateListing() {
       }))
     }
   }
+  function onSubmit(e){
+    e.preventDefault();
+    setLoading(true);
+    if(discountedPrice>=regularPrice){
+      setLoading(false);
+      toast.error("regular price can not be less than discount");
+      return;
+    }
+    if(images.length > 2){
+      setLoading(false);
+      toast.error("it is max 6");
+      return;
+    }
+    let geolocation={}
+    let location
+    if(geolocationEnabled){
+
+    }
+
+
+  }
+  if(loading){
+    return <Spinner />
+  }
   return (
     <main className="max-w-md px-2 mx-auto ">
       <h1 className="text-3xl text-center mt-6 font bold">Create a Listing</h1>
-      <form>
+      <form onSubmit={onSubmit}>
         <p className="text-lg mt-6 font-semibold">Sell / Rent</p>
         <div className="flex">
           <button
@@ -104,7 +135,7 @@ export default function CreateListing() {
               required
               className="px-4 py-2 text-xl text-gray-700
               bg-white border border-gray-700 rounded
-              taransition duration-150 ease-in-out focus:text-gray-700
+              transition duration-150 ease-in-out focus:text-gray-700
               focus:bg-white focus:border-slate-600 text-center"
             />
           </div>
@@ -112,7 +143,7 @@ export default function CreateListing() {
             <p className="text-lg font-semibold">Bath</p>
             <input
               type="number"
-              id="bedrooms"
+              id="bathrooms"
               value={bathrooms}
               onChange={onChange}
               min="1"
@@ -120,7 +151,7 @@ export default function CreateListing() {
               required
               className="w-full px-4 py-2 text-xl text-gray-700
               bg-white border border-gray-700 rounded
-              taransition duration-150 ease-in-out focus:text-gray-700
+              transition duration-150 ease-in-out focus:text-gray-700
               focus:bg-white focus:border-slate-600 text-center"
             />
           </div>
@@ -203,6 +234,32 @@ export default function CreateListing() {
           bg-white border border-gray-300 rounded transition first-letter:duration-150
           easy-in-out focus:text-gray-700 focus:border-slate-600 mb-6"
         />
+        {!geolocationEnabled && (
+          <div className="flex space-x-6 justify-start  mb-6">
+            <div className="">
+              <p className="text-lg font-semibold " >Latitude</p>
+              <input type="number" id="latitude" value={latitude} onChange={onChange} 
+              required
+              min="-90"
+              max="90"
+              className="w-full px-4 py-2 text-xl
+              text-gray-300 rounded transition duration 150
+              ease-in-out focus:bg-white focus:text-gray-700
+              focus:border-slate-600 text-center"/>
+            </div>
+            <div className="">
+              <p className="text-lg font-semibold " >Longitude</p>
+              <input type="number" id="longitude" value={longitude} onChange={onChange} 
+              required
+              min="-180"
+              max="180"
+              className="w-full px-4 py-2 text-xl
+              text-gray-300 rounded transition duration 150
+              ease-in-out focus:bg-white focus:text-gray-700
+              focus:border-slate-600 text-center"/>
+            </div>
+          </div>
+        )}
          <p className="text-lg mt-6 font-semibold">description</p>
         <input
           type="text"
@@ -225,7 +282,7 @@ export default function CreateListing() {
             className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded
                  hover:shadow-lg focus:shadow-lg
                 transition duration-150 ease-in-out w-full ${
-                  !furnished
+                  !offer
                     ? "bg-white text-black"
                     : "bg-slate-500 text-white"
                 }`}
@@ -240,7 +297,7 @@ export default function CreateListing() {
             className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded
                  hover:shadow-lg focus:shadow-lg
                 transition duration-150 ease-in-out w-full ${
-                furnished
+                offer
                     ? "bg-white text-black"
                     : "bg-slate-500 text-white"
                 }`}
@@ -301,7 +358,7 @@ export default function CreateListing() {
           <input type="file" 
           id="images" 
           onChange={onChange}
-          accept=".jpg,.png,.jpep"
+          accept=".jpg,.png,.jpeg"
           multiple
           required
           className="w-full px-3 py-1.5 text-gray-700 bg-white
