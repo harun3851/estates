@@ -17,12 +17,12 @@ export default function CreateListing() {
     discountedPrice:0,
     latitude: 0,
     longitude:0,
-    images:{}
+    images:{},
 
   });
   const [geolocationEnabled,setGeolocationEnabled]=useState(true);
   const [loading, setLoading]=useState(false);
-  const { type, name, bedrooms, bathrooms,parking,furnished,address, description,offer,regularPrice,discountedPrice, latitude, longitude,images } = formData;
+  const { type, name, bedrooms, bathrooms,parking,furnished,address, description,offer,regularPrice,discountedPrice, latitude, longitude,images, } = formData;
   function onChange(e) {
     let boolean = null;
 
@@ -47,7 +47,7 @@ export default function CreateListing() {
       }))
     }
   }
-  function onSubmit(e){
+  async function onSubmit(e){
     e.preventDefault();
     setLoading(true);
     if(discountedPrice>=regularPrice){
@@ -55,19 +55,39 @@ export default function CreateListing() {
       toast.error("regular price can not be less than discount");
       return;
     }
-    if(images.length > 2){
+    if(images.length >=2){
       setLoading(false);
-      toast.error("it is max 6");
+      toast.error("it is max 2");
       return;
     }
-    let geolocation={}
-    let location
+  }
+   {/*" let geolocation={}
+    let location; 
     if(geolocationEnabled){
 
+       const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}
+      `);
+      const data = await response.json()
+      console.log(data);
+      geolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
+      geolocation.lng = data.results[0]?.geometry.location.lng ?? 0; 
+
+      location = data.status === "ZERO_RESULTS" && undefined;
+      if(location===undefined || location.includes("undefined")){
+        setLoading(false);
+          toast.error("please enter correct address");
+          return;
+      }
     }
+      const imgUrls = await Promise.all(
+      [...images].map((Image)=>storeImage(image)).catch((error)=>{
+        setLoading(false)
+        toast.error("Images not uploaded")
+        return 
+      })
+    )*/}
 
 
-  }
   if(loading){
     return <Spinner />
   }
