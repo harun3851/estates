@@ -13,6 +13,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
+
 export default function CreateListing() {
   const navigate = useNavigate();
   const auth = getAuth();
@@ -29,8 +30,6 @@ export default function CreateListing() {
     offer: false,
     regularPrice: 0,
     discountedPrice: 0,
-    latitude: 0,
-    longitude: 0,
     images: {},
   });
   const {
@@ -45,8 +44,6 @@ export default function CreateListing() {
     offer,
     regularPrice,
     discountedPrice,
-    latitude,
-    longitude,
     images,
   } = formData;
   function onChange(e) {
@@ -133,7 +130,18 @@ export default function CreateListing() {
       toast.error("Images not uploaded");
       return;
     });
-    console.log(imgUrls);
+    const formDataCopy = {
+      ...formData,
+      imgUrls,
+      timestamp: serverTimestamp(),
+    };
+    delete formDataCopy.images;
+    delete formDataCopy.discountedPrice;
+    !formDataCopy.offer && delete formDataCopy.discountedPrice;
+    const docRef= await addDoc(collection(db,"listings"), formDataCopy);
+    setLoading(false);
+    toast.success("listing created");
+    navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   }
 
   if (loading) {
