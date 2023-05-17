@@ -19,11 +19,13 @@ import {
 } from "firebase/firestore";
 
 export default function Profile() {
-  const [listing,setListings]= useState(false);
-  const [loading, setLoading]= useState(true);
+
   const auth = getAuth();
   const navigate = useNavigate();
-    const [formData, setFormData] = useState({
+  const [listings,setListings]= useState(null);
+  const [loading, setLoading]= useState(true);
+
+  const [formData, setFormData] = useState({
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
   });
@@ -56,25 +58,27 @@ try {
 }
   }
 
-  useEffect(()=>{
-    async function fetchUserListings(){
-      
+  useEffect(() => {
+    async function fetchUserListings() {
       const listingRef = collection(db, "listings");
-      const q = query(listingRef, where("userRef","==",auth.currentUser.uid),orderBy("Timestamp","desc")
+      const q = query(
+        listingRef,
+        where("userRef", "==", auth.currentUser.uid),
+        orderBy("timestamp", "desc")
       );
       const querySnap = await getDocs(q);
-      let listing = [];
-      querySnap.forEach((doc)=>{
-        return listing.push({
+      let listings = [];
+      querySnap.forEach((doc) => {
+        return listings.push({
           id: doc.id,
           data: doc.data(),
         });
       });
-      setListings(listing);
+      setListings(listings);
       setLoading(false);
     }
     fetchUserListings();
-  },[auth.currentUser.uid])
+  }, [auth.currentUser.uid]);
 
   return (
     <>
@@ -133,14 +137,16 @@ try {
           </button>
         </div>
       </section>
+
       <div className="max-w-6xl px-3 mt-6 mx-auto">
-        {!loading && listing.length > 0 &&(
+        {!loading && listings.length > 0 && (
+              
           <>
           <h2 className="text-2xl text-center font-semibold">
             My Listing
           </h2>
           <ul>
-            {listing.map((listing)=>(
+            {listings.map((listing)=>(
               <ListingItem 
                   key={listing.id} 
                   id={listing.id }
