@@ -83,7 +83,7 @@ try {
   return (
     <>
       <section className="max-w-6xl mx-auto flex justify-center items-center flex-col">
-        <h1 className="text-3xl text-center mt-6 font-bold">My Profile</h1>
+        <h1 className="text-3xl text-center mt-6  font-bold">My Profile</h1>
         <div className="w-full md:w-[50%] mt-6 px-3">
           <form>
             {/*name input*/}
@@ -108,7 +108,7 @@ try {
             />
 
             <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg">
-              <p className="flex items-center">
+              <p className="flex mb-6 items-center">
                 Do you want to change your name?
                 <span onClick={()=>{ changeDetail && onSubmit();
                 setChangeDetail((prevState)=>!prevState);
@@ -145,7 +145,7 @@ try {
           <h2 className="text-2xl text-center font-semibold">
             My Listing
           </h2>
-          <ul>
+          <ul className="sm:grid sm:grid-cols-3  lg:grid-cols-4 xl:grid-cols-4 2xl-grid-cols-5 mt-6 mb-6 ">
             {listings.map((listing)=>(
               <ListingItem 
                   key={listing.id} 
