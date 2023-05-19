@@ -1,9 +1,11 @@
 import React from 'react';
 import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
-import {MdLocationOn} from "react-icons/md"
+import {MdLocationOn} from "react-icons/md";
+import {FaTrash} from "react-icons/fa";
+import {MdEdit} from "react-icons/md"
 
-export default function ListingItem({listing,id}) {
+export default function ListingItem({listing,id,onEdit, onDelete}) {
   return <li className="bg-white relative flex flex-col justify-between items-center 
   shadow-md hover:shadow-xl rounded-md duration-150 
   overflow-hidden transition-shadow m-[10px] ">
@@ -30,7 +32,7 @@ export default function ListingItem({listing,id}) {
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
             {listing.type === "rent" && " / month"}
             </p>
-            {listing.type==="rent"&& "/month"}
+          
             <div className="flex items-center mt-[10px] space-x-3">
               <div className="">
                 <p className="font-bold text-xs">{listing.bedrooms> 1 ? `${listing.bedrooms} Beds` :"1 Bed"}</p>
@@ -41,5 +43,15 @@ export default function ListingItem({listing,id}) {
             </div>
        </div>
     </Link>
+    {onDelete && (
+      <FaTrash className="absolute bottom-2 right-2 h-[14px] cursor-pointer text-red-500" 
+      onClick={()=>onDelete(listing.id)}
+      />
+    )}
+    {onEdit && (
+      <MdEdit className="absolute bottom-2 right-7 h-4 cursor-pointer text-black" 
+      onClick={()=>onEdit(listing.id)}
+      />
+    )}
     </li>
 }
