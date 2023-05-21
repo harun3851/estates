@@ -30,7 +30,9 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/offers" element={<Offers />} />
-          <Route path="/category/:categoryName/:listingId" element={<Listing />} />
+          <Route 
+          path="/category/:categoryName/:listingId" 
+          element={<Listing />} />
           <Route path="/edit-listing" element={<PrivateRoute />}>
             <Route path="/edit-listing/:listingId" element={<EditListing/>} />
           </Route>

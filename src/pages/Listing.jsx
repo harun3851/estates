@@ -1,37 +1,45 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router';
-import {doc , getDoc} from "firebase/firestore";
-import {db} from "../firebase";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import Spinner from "../components/Spinner";
-import {Swiper, SwiperSlide} from "swiper/react";
-import SwiperCore, {EffectFade, Autoplay, Navigation, Pagination} from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, {
+  EffectFade,
+  Autoplay,
+  Navigation,
+  Pagination,
+} from "swiper";
 import "swiper/css/bundle";
-
+import { getAuth } from "firebase/auth";
 
 export default function Listing() {
-    const params = useParams();
-    const [listing, setListing] = useState(null);
-    const [loading, setLoading] = useState(true);
-    SwiperCore.use(Autoplay, Navigation, Pagination);
+  const auth = getAuth();
+  const params = useParams();
+  const [listing, setListing] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [shareLinkCopied, setShareLinkCopied] = useState(false);
+  const [contactLandlord, setContactLandlord] = useState(false);
 
-    useEffect(()=>{
-        async function fetchListing(){
-            const docRef = doc(db, "listing" , params.listingId);
-            const docSnap = await getDoc(docRef);
-            if(docSnap.exists()){
-              setListing(docSnap.data());
-              setLoading(false);
-       
-            }
-        }
-        fetchListing();
-    },[params.listingId]);
-    if(!loading){
-      return <Spinner />;
+  SwiperCore.use([Autoplay, Navigation, Pagination]);
+
+  useEffect(() => {
+    async function fetchListing() {
+      const docRef = doc(db, "listings", params.listingId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setListing(docSnap.data());
+        setLoading(false);
+      }
     }
+    fetchListing();
+  }, [params.listingId]);
+  if (loading) {
+    return <Spinner />;
+  }
   return (
-  <main>   
-  <Swiper
+    <main>
+      <Swiper
         slidesPerView={1}
         navigation
         pagination={{ type: "progressbar" }}
@@ -51,6 +59,6 @@ export default function Listing() {
           </SwiperSlide>
         ))}
       </Swiper>
-  </main>
-);
-    }
+    </main>
+  );
+}
