@@ -12,8 +12,10 @@ import SwiperCore, {
 } from "swiper";
 import "swiper/css/bundle";
 import { getAuth } from "firebase/auth";
-import { FaShare } from "react-icons/fa";
+import { FaBath, FaParking, FaShare } from "react-icons/fa";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import {FaBed} from "react-icons/fa";
+
 export default function Listing() {
   const auth = getAuth();
   const params = useParams();
@@ -107,6 +109,28 @@ export default function Listing() {
           )}
           </div>
           <p className="mt-3 mb-3"> <span className="font-semibold">Description -</span>{listing.description}</p>
+          <ul className="flex items-center space-x-2 lg:space-x-10 text-sm font-semibold">
+            <li className="flex items-center whitespace-nowrap">
+            <FaBed />
+              {listing.bedrooms > 1 ? `${
+                listing.bedrooms} Beds` : "1 Bed"}
+            </li>
+            <li className="flex items-center whitespace-nowrap">
+            <FaBath />
+              {listing.bathrooms > 1 ? `${
+                listing.bathrooms} Baths` : "1 Bath"}
+            </li>
+            <li className="flex items-center whitespace-nowrap">
+            <FaParking />
+              {listing.parking > 1 ? `${
+                listing.parking} Parking Spot` : "No parking"}
+            </li>
+            <li className="flex items-center whitespace-nowrap">
+            <FaParking />
+              {listing.furnished > 1 ? `${
+                listing.furnished} Furnished` : "No Furnished"}
+            </li>
+          </ul>
         </div>
         <div
           className="bg-blue-300 w-full h-[200px] lg-[400px] z-10 overflow-x-hidden
