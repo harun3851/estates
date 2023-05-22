@@ -369,6 +369,7 @@ fetchListing()
                   <p className="text-md w-full whitespace-nowrap">$ / Month</p>
                 </div>
               )}
+
             </div>
           </div>
         </div>
@@ -387,6 +388,7 @@ fetchListing()
                   required={offer}
                   className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 text-center"
                 />
+              
                 {type === "rent" && (
                   <div className="">
                     <p className="text-md w-full whitespace-nowrap">
