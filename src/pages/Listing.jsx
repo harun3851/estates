@@ -14,8 +14,9 @@ import "swiper/css/bundle";
 import { getAuth } from "firebase/auth";
 import { FaBath, FaParking, FaShare } from "react-icons/fa";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import {FaBed} from "react-icons/fa";
+import { FaBed } from "react-icons/fa";
 import Contact from "../components/Contact";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 export default function Listing() {
   const auth = getAuth();
@@ -24,6 +25,7 @@ export default function Listing() {
   const [loading, setLoading] = useState(true);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [contactLandlord, setContactLandlord] = useState(false);
+  const position = [60 , 24]
 
   SwiperCore.use([Autoplay, Navigation, Pagination]);
 
@@ -101,35 +103,47 @@ export default function Listing() {
             <FaMapMarkerAlt className="text-green-700" />
             {listing.address}
           </p>
-<div className="flex justify-start items-center space-x-4 w-[75%]">
-          <p className="bg-red-800 w-full max-w-[200px] rounded-md p-1 text-white text-center font-semibold
-          shadow-md ">{listing.type === "rent" ? "Rent" : "Sale"}</p>
-          {listing.offer && (
-            <p className="w-full max-w-[200px] bg-green-800 rounded-md 
-            p-1 text-white text-center font-semibold shadow-md">${+listing.regularPrice - +listing.discountedPrice} discount</p>
-          )}
+          <div className="flex justify-start items-center space-x-4 w-[75%]">
+            <p
+              className="bg-red-800 w-full max-w-[200px] rounded-md p-1 text-white text-center font-semibold
+          shadow-md "
+            >
+              {listing.type === "rent" ? "Rent" : "Sale"}
+            </p>
+            {listing.offer && (
+              <p
+                className="w-full max-w-[200px] bg-green-800 rounded-md 
+            p-1 text-white text-center font-semibold shadow-md"
+              >
+                ${+listing.regularPrice - +listing.discountedPrice} discount
+              </p>
+            )}
           </div>
-          <p className="mt-3 mb-3"> <span className="font-semibold">Description -</span>{listing.description}</p>
+          <p className="mt-3 mb-3">
+            {" "}
+            <span className="font-semibold">Description -</span>
+            {listing.description}
+          </p>
           <ul className="flex items-center space-x-2 lg:space-x-10 text-sm font-semibold">
             <li className="flex items-center whitespace-nowrap">
-            <FaBed />
-              {listing.bedrooms > 1 ? `${
-                listing.bedrooms} Beds` : "1 Bed"}
+              <FaBed />
+              {listing.bedrooms > 1 ? `${listing.bedrooms} Beds` : "1 Bed"}
             </li>
             <li className="flex items-center whitespace-nowrap">
-            <FaBath />
-              {listing.bathrooms > 1 ? `${
-                listing.bathrooms} Baths` : "1 Bath"}
+              <FaBath />
+              {listing.bathrooms > 1 ? `${listing.bathrooms} Baths` : "1 Bath"}
             </li>
             <li className="flex items-center whitespace-nowrap">
-            <FaParking />
-              {listing.parking > 1 ? `${
-                listing.parking} Parking Spot` : "No parking"}
+              <FaParking />
+              {listing.parking > 1
+                ? `${listing.parking} Parking Spot`
+                : "No parking"}
             </li>
             <li className="flex items-center whitespace-nowrap">
-            <FaParking />
-              {listing.furnished > 1 ? `${
-                listing.furnished} Furnished` : "No Furnished"}
+              <FaParking />
+              {listing.furnished > 1
+                ? `${listing.furnished} Furnished`
+                : "No Furnished"}
             </li>
           </ul>
           {listing.userRef !== auth.currentUser?.uid && !contactLandlord && (
@@ -145,12 +159,26 @@ export default function Listing() {
           {contactLandlord && (
             <Contact userRef={listing.userRef} listing={listing} />
           )}
+        </div>
+        <div className=" w-full h-[200px] md:h-[400px] z-10 overflow-x-hidden mt-6 md:mt-0 md:ml-2  "
+        >
+     
+     <MapContainer center={position} zoom={13} 
+     scrollWheelZoom={false}
+     style={{ height: "100%", width: "100%" }}
+     >
+    <TileLayer
+      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    />
+    <Marker position={position}>
+      <Popup>
+        A pretty CSS3 popup. <br />
+      </Popup>
+    </Marker>
+  </MapContainer>
       
         </div>
-        <div
-          className="bg-blue-300 w-full h-[200px] lg-[400px] z-10 overflow-x-hidden
-      "
-        ></div>
       </div>
     </main>
   );
