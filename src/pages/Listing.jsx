@@ -15,6 +15,7 @@ import { getAuth } from "firebase/auth";
 import { FaBath, FaParking, FaShare } from "react-icons/fa";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import {FaBed} from "react-icons/fa";
+import Contact from "../components/Contact";
 
 export default function Listing() {
   const auth = getAuth();
@@ -141,7 +142,9 @@ export default function Listing() {
               </button>
             </div>
           )}
-          
+          {contactLandlord && (
+            <Contact userRef={listing.userRef} listing={listing} />
+          )}
       
         </div>
         <div
