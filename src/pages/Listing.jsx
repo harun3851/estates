@@ -173,7 +173,7 @@ export default function Listing() {
     />
     <Marker position={position}>
       <Popup>
-        A pretty CSS3 popup. <br />
+       {listing.address} <br />
       </Popup>
     </Marker>
   </MapContainer>
